@@ -1,63 +1,66 @@
-const Admin = require('../models/administrateur');
-const travailleurs = require('../models/travailleurs');
+
+const User = require('../models/user');
+
 //const { registerValidation } = require('../validation');
 
-exports.registeradmin = async (req, res) => {
+exports.registeruser = async (req, res) => {
     //validate the data 
     //const { error } = registerValidation(req.body);
     //if (error) return res.status(400).send(error.message);
 
     //checking if the admin exists in DB
 
-    const emailExist = await Admin.findOne({ email: req.body.email });
+    const emailExist = await User.findOne({ email: req.body.email });
     if (emailExist) return res.status(400).send('Email already exist');
 
     //Hash the passwords
 
 
-    admin = new Admin({
+    const user = new User({
         matricule: req.body.matricule,
         name: req.body.name,
         lastname: req.body.lastname,
         adress: req.body.adress,
         email: req.body.email,
         password: req.body.password,
-        isAdmin: req.body.isAdmin,
+        isAdmin: false,
         type: req.body.type
     })
     try {
-        const savedadmin = await admin.save();
-        res.send(admin);
+        const saveduser = await user.save();
+        res.send(user);
     } catch (error) {
         res.status(400).send(error);
     }
 }
-exports.register = async (req, res) => {
-    //validate the data 
+exports.RegisterAdmin = async (req,res)=>{
+//validate the data 
     //const { error } = registerValidation(req.body);
     //if (error) return res.status(400).send(error.message);
 
     //checking if the admin exists in DB
 
-    const emailExist = await travailleurs.findOne({ email: req.body.email });
+    const emailExist = await User.findOne({ email: req.body.email });
     if (emailExist) return res.status(400).send('Email already exist');
 
     //Hash the passwords
 
 
-    travailleur = new travailleurs({
+    const user = new User({
         matricule: req.body.matricule,
         name: req.body.name,
         lastname: req.body.lastname,
         adress: req.body.adress,
         email: req.body.email,
         password: req.body.password,
-        //type: req.body.type
+        isAdmin: true
+        
     })
     try {
-        const savedtravailleur = await travailleur.save();
-        res.send(travailleur);
+        const saveduser = await user.save();
+        res.send(user);
     } catch (error) {
         res.status(400).send(error);
     }
 }
+

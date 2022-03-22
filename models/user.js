@@ -1,9 +1,9 @@
+const boolean = require('@hapi/joi/lib/types/boolean');
 const number = require('@hapi/joi/lib/types/number');
-const { type } = require('express/lib/response');
 const mongoose = require('mongoose');
 
 
-const travailleurSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
 
     matricule: {
         type: number,
@@ -32,7 +32,6 @@ const travailleurSchema = new mongoose.Schema({
         max: 255,
         min: 8
     },
-
     password: {
         type: String,
         required: true,
@@ -42,11 +41,16 @@ const travailleurSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
-    }, 
+    },
+    isAdmin: {
+        type: boolean,
+        required: true,
+    },
+
     type: {
         type: String,
-        enum: ["travailleur", "receptionniste", "admin"],
-        default: "travailleur",
+        enum: ["travailleur", "receptionniste", "admin", "client"],
+        default: "admin",
     },
 })
-module.exports = mongoose.model('travailleur', travailleurSchema);
+module.exports = mongoose.model('user',userSchema);
