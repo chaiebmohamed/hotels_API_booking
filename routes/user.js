@@ -7,6 +7,7 @@ router.patch('/change',userController.manipuleRole);
 router.get('/all',userController.getalluser);
 router.post('/registeradmin',authcontroller.RegisterAdmin);
 router.post('/register', authcontroller.registeruser);
+router.post('/addroom',userController.addRoom);
 
 
 

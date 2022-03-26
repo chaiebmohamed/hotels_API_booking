@@ -12,7 +12,8 @@ const chambreSchema = new mongoose.Schema({
     
     isAvailable : {
         type : boolean,
-        required: true
+        required: true,
+        default : true
     } ,
 
     price:{
@@ -25,7 +26,7 @@ const chambreSchema = new mongoose.Schema({
         required: true
     },
 
-    numberofpersone : {
+    numberofperson : {
         type : number,
         required : true
     }
@@ -34,4 +35,4 @@ const chambreSchema = new mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('spa',chambreSchema);
+module.exports = mongoose.model('room',chambreSchema);
