@@ -11,8 +11,10 @@ const sportSchema = new mongoose.Schema({
     
     isAvailable : {
         type : boolean,
-        required: true
+        required: true,
+        default : true
+        
     } 
 })
 
-module.exports = mongoose.model('spa',sportSchema);
+module.exports = mongoose.model('salledesport',sportSchema);

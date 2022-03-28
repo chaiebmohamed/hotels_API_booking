@@ -11,7 +11,8 @@ const spaSchema = new mongoose.Schema({
     
     isAvailable : {
         type : boolean,
-        required: true
+        required: true,
+        default : true
     } 
 
 
