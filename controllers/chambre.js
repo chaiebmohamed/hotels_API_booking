@@ -17,20 +17,34 @@ exports.addRoom = async (req, res) => {
 
     }
     catch (error) {
-        res.status(400).send(error);    
+        res.status(400).send(error);
     }
 
 }
 
-exports.changeStatus = async (req , res) => {
+exports.changeStatusToNotAvailble = async (req, res) => {
 
-   
+
     try {
-        const room = await Room.findOneAndUpdate({id : req.body.id , isAvailable : true} , {isAvailable : false})
+        const room = await Room.findOneAndUpdate({ id: req.body.id, isAvailable: true }, { isAvailable: false })
         return res.status(200).send(room);
     } catch (error) {
         res.status(400).send(error);
-        
+
     }
-    
+
+
+}
+
+exports.changeStatusToAvailble = async (req, res) => {
+
+
+    try {
+        const room = await Room.findOneAndUpdate({ id: req.body.id, isAvailable: false }, { isAvailable: true })
+        return res.status(200).send(room);
+    } catch (error) {
+        res.status(400).send(error);
+
+    }
+
 }
