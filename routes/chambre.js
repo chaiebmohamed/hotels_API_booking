@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const roomController = require('../controllers/chambre');
 
 
-router.post('/add',roomController.addRoom);
+router.post('/addroom',roomController.addRoom);
+router.put('/changestatus',roomController.changeStatus);
 
 module.exports = router;

@@ -21,3 +21,16 @@ exports.addRoom = async (req, res) => {
     }
 
 }
+
+exports.changeStatus = async (req , res) => {
+
+   
+    try {
+        const room = await Room.findOneAndUpdate({id : req.body.id , isAvailable : true} , {isAvailable : false})
+        return res.status(200).send(room);
+    } catch (error) {
+        res.status(400).send(error);
+        
+    }
+    
+}
