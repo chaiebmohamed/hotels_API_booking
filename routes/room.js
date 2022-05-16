@@ -1,6 +1,5 @@
 const router = require('express').Router();
-const mongoose = require('mongoose');
-const roomController = require('../controllers/chambre');
+const roomController = require('../controllers/room');
 
 
 router.post('/addroom',roomController.addRoom);

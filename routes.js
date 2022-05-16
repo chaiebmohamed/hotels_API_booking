@@ -1,12 +1,12 @@
 const userRoute = require("./routes/user");
-const spaRoute = require("./routes/spa");
-const roomRoute = require("./routes/chambre");
-const sportRoute = require ("./routes/salledesport");
+const serviceRoute = require("./routes/service");
+const roomRoute = require("./routes/room");
+
 
 module.exports = function (app, express) {
+    
     app.use('/user',userRoute);
-    app.use('/spa',spaRoute);
+    app.use('/service',serviceRoute);
     app.use('/room',roomRoute);
-    app.use('/sport',sportRoute);
-
+  
 }

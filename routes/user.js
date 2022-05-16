@@ -1,10 +1,15 @@
-const router = require('express').Router();
-const mongoose = require('mongoose');
+const express = require('express')
+const router=express()
+
 const authcontroller = require('../controllers/auth');
 const userController = require('../controllers/user');
+const auth=require("../middlewares/auth")
+
+
+router.get('/all',auth,userController.getAlluser);
 
 router.patch('/change',userController.manipuleRole);
-router.get('/all',userController.getalluser);
+
 router.post('/registeradmin',authcontroller.RegisterAdmin);
 router.post('/register', authcontroller.registeruser);
 
