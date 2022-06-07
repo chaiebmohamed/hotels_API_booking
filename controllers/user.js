@@ -80,6 +80,10 @@ exports.addUser = async (req, res,next) => {
 }
 
 exports.addAdmin=async(req,res,next)=>{
+ 
+let Matricule="ADMIN"+Math.floor((Math.random()*1000000)+1);
+
+try {
   const userExist = await User.findOne({
     email: req.body.email,
     firstname:req.body.firstname,
@@ -88,9 +92,6 @@ exports.addAdmin=async(req,res,next)=>{
 });
 if (userExist) return res.status(400).send({error:'Admin already exist'});
 
-let Matricule="ADMIN"+Math.floor((Math.random()*1000000)+1);
-
-try {
 
 const user = new User({
    matricule: Matricule,
@@ -105,8 +106,11 @@ const user = new User({
    salary:req.body.salary,
    phone:req.body.phone,
    isAdmin: true,
-   type: "admin",    
+   type: "admin",
+   password : req.body.password    
 })
+
+  console.log(user);
 
 if (req.files && req.files.avatar) {
    req.files.avatar.name=`avatar.${req.files.avatar.mimetype.split('/')[1]}`

@@ -3,7 +3,7 @@ const jwt=require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
 
-    matricule: {type: Number,required: true,min: 8},
+    matricule: {type: String,required: true,min: 8},
     firstname: {type: String,required: true,min: 6,max: 25},
     lastname: {type: String,required: true,min: 6,max: 25},
     adress: {type: String,required: true},
