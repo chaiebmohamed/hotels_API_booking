@@ -4,11 +4,13 @@ const ServiceSchema = new mongoose.Schema({
 
   name:{type:String,required:true},
   description:{type:String,required:true},
-  type:{type:String,required:true},
+  type:{type:String,required:true,enum:["restauration","ASI","lingerie"]},
   image: {type:String,required:true,default:""},
+  isAvaible:{type:Boolean,required:true,default:false},
+  price:{type:Number,required:true},
   capacity:{type:Number,required:true,min:0},
   avaible_places:{type:Number,required:true,min:0},
-  rating:{type:Number,required:true},
+  rating:{type:Number,required:true,default:0},
   comments:[
       { 
           client:{type:mongoose.Types.ObjectId,ref:"user"},
