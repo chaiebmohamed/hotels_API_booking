@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema({
     profession : {type:String,required:true,},
     date_birth: {type: Date,default: Date.now},
     place_birth: {type: String,required:true},
-    avatar:{type:String,required:true},
+    avatar:{type:String,required:false},
     phone: {type:String,required:true},
     salary:{type:Number,required:false,default:0},
     isAdmin: {type: Boolean,required: true},
