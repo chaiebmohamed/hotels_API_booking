@@ -15,7 +15,7 @@ const ServiceSchema = new mongoose.Schema({
       { 
           client:{type:mongoose.Types.ObjectId,ref:"user"},
           comment:{type:String,required:true},
-          mark: {type:Number,required:true}
+          mark: {type:Number,required:true,max:5 ,min:0}
       }
   ]
 })

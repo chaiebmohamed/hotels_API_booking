@@ -2,6 +2,22 @@ const User = require('../models/user');
 const bcrypt = require("bcrypt");
 const {uploadImage}=require("../helpers/manage-file")
 
+exports.getUser = async (req, res,next) => {
+
+  
+  
+  try
+  {
+    let user = await User.findOne({_id:req.params.id,status : true}).select("-password");
+    if(!user) return res.status(400).send({error:"user not found"})
+    return res.status(200).send(user);
+  }
+  catch(ex){
+    next(ex)
+  }
+}
+
+
 exports.getAlluser = async (req, res,next) => {
     try 
     {
@@ -27,19 +43,25 @@ exports.addUser = async (req, res,next) => {
     });
     if (userExist) return res.status(400).send({error:'user already exist'});
 
-    let Matricule=""
+    
+
+    var Matricule=""
     switch(req.body.type)
     {
       case "client":
         Matricule="CLI"+Math.floor((Math.random()*1000000)+1);
+      break;
       case "travailleur":
         Matricule="TRA"+Math.floor((Math.random()*1000000)+1);
-      case "recepsioniste":
+      break;
+        case "receptionniste":
         Matricule="REC"+Math.floor((Math.random()*1000000)+1);
-      default:
+      break;
+        default:
         Matricule=""
     }
     try {
+      
 
     const user = new User({
         matricule: Matricule,
@@ -48,7 +70,7 @@ exports.addUser = async (req, res,next) => {
         adress: req.body.adress,
         email: req.body.email,
         country:req.body.country,
-        profession:req.body.profession,
+        
         date_birth:req.body.date_birth,
         place_birth:req.body.place_birth,
         salary:req.body.salary,
@@ -100,7 +122,7 @@ const user = new User({
    adress: req.body.adress,
    email: req.body.email,
    country:req.body.country,
-   profession:"admin",
+  
    date_birth:req.body.date_birth,
    place_birth:req.body.place_birth,
    salary:req.body.salary,
@@ -154,7 +176,7 @@ exports.singIn=async(req,res,next)=>{
 
 exports.removeUser=async(req,res,next)=>{
   try{
-    const user=await User.findByIdAndUpdate(req.paramas.id,{status:false})
+    const user=await User.findByIdAndUpdate(req.params.id,{status:false})
     if(!user) return res.status(404).send({error:"user not found"})
     return res.status(200).send({message:"user removed"})
   }
@@ -168,7 +190,7 @@ exports.updateProfil=async(req,res,next)=>{
   try
   {
     let currentUser=await User.findById(req.user._id)
-
+    console.log(req.user._id);
     var avatar;
     if (req.files && req.files.avatar) {
       req.files.avatar.name=`avatar.${req.files.avatar.mimetype.split('/')[1]}`
@@ -187,7 +209,8 @@ exports.updateProfil=async(req,res,next)=>{
        email:req.body.email || currentUser.email,
        avatar:avatar || currentUser.avatar
     }
-    currentUser=await User.findByIdAndUpdate(req.user._id,{updateInfos})
+    currentUser=await User.findByIdAndUpdate(req.user._id,updateInfos)
+    
     if(currentUser) return res.status(200).send({message:"success updating profil"})
 
     return res.status(400).send({error:"failed update profil"})
@@ -207,7 +230,8 @@ exports.updatePassword=async(req,res,next)=>{
 
     if(req.body.newpassword!== req.body.renewpassword)
      return res.status(400).send({error:"failed to confirm new password"})
-
+    if (req.body.newpassword == req.body.oldpassword)
+      return res.status(400).send({error:"new password must be different to the old one"})
     let currentUser=await User.findById(req.user._id)
     const validpassword = await bcrypt.compare(req.body.oldpassword, currentUser.password)
     if(!validpassword) return res.status(401).send({ error: 'Invalid Password.' });

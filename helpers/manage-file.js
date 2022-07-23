@@ -12,7 +12,7 @@ const uploadImage = async (directory,name, file, type = "any", maxSize = 5242880
     const made = await mkdirp(directory)
     const file_path = `./${directory}/${name}-${file.name}`;
     await file.mv(file_path)
-    return file_path
+    return  file_path.slice(file_path.indexOf('c')+1,file_path.length)
   }
   catch (error) {    
     return "error"

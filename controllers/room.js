@@ -1,5 +1,5 @@
 const Room = require('../models/room');
-
+const {uploadImage}=require("../helpers/manage-file")
 exports.getAll=async(req,res,next)=>{
     try{
        let rooms=await Room.find()
@@ -29,7 +29,7 @@ exports.addRoom = async (req, res,next) => {
     try 
     {
         let room=await Room.findOne({
-           numero:req.body.numero,
+           numero:req.body.block+"-"+req.body.numero,
            type:req.body.type,
            block:req.body.block
         })
@@ -47,10 +47,14 @@ exports.addRoom = async (req, res,next) => {
         var images=[];
         if (req.files && req.files.images)
         {
-            for(var i=0;i<req.files.length;i++){
+            
+            for(var i=0;i<req.files.images.length;i++){
+                
                 req.files.images[i].name=`image.${req.files.images[i].mimetype.split('/')[1]}`
                 let new_image=await uploadImage(`public/rooms/${numero}`,`${numero+"-"+i}`,req.files.images[i], "image")
+                
                 if(new_image!=="error") images.push(new_image)
+                console.log()
             }
         }
         room.images=images;
@@ -65,7 +69,7 @@ exports.addRoom = async (req, res,next) => {
 
 exports.changeStatusToNotAvailble = async (req, res,next) => {
     try {
-        const room = await Room.findOneAndUpdate({ numero: req.params.id, isAvailable: true }, { isAvailable: false })
+        const room = await Room.findOneAndUpdate({ _id: req.params.id, isAvailable: true }, { isAvailable: false })
         if(room) return res.status(200).send({message:"room closed"});
         return res.status(400).send({error:"room not found"})
     }
@@ -77,7 +81,7 @@ exports.changeStatusToNotAvailble = async (req, res,next) => {
 
 exports.changeStatusToAvailble = async (req, res,next) => {
     try {
-        const room = await Room.findOneAndUpdate({ numero: req.params.id, isAvailable: false }, { isAvailable: true })
+        const room = await Room.findOneAndUpdate({ _id: req.params.id, isAvailable: false }, { isAvailable: true })
         if(room) return res.status(200).send({message:"room opened"});
         return res.status(400).send({error:"room not found"})
     } 
@@ -101,7 +105,7 @@ exports.changePriceByType=async(req,res,next)=>{
 
 exports.changePrice=async(req,res,next)=>{
     try{
-        let room=await Room.findOneAndUpdate({numero:req.params.id},{price:req.body.price})
+        let room=await Room.findOneAndUpdate({_id:req.params.id},{price:req.body.price})
         if(room) return res.status(200).send({message:"success update price"})
         return res.status(400).send({error:"failed update price"})
     }

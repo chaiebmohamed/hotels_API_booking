@@ -1,5 +1,6 @@
 const Service=require("../models/service")
 
+const {uploadImage}=require("../helpers/manage-file")
 
 exports.getAll=async(req,res,next)=>{
     try{
@@ -33,7 +34,7 @@ exports.addService=async(req,res,next)=>{
 
       if (req.files && req.files.image) {
         req.files.image.name=`image.${req.files.image.mimetype.split('/')[1]}`
-        const new_image=await uploadImage(`public/images/${req.body.type}`,`${req.body.name}${req.body.type}`,req.files.image, "image")
+        const new_image=await uploadImage(`public/services/${req.body.type}/${req.body.name}`,`${req.body.name}${req.body.type}`,req.files.image, "image")
         if(new_image!=="error") service.image = new_image 
       }
 
@@ -59,6 +60,17 @@ exports.removeService=async(req,res,next)=>{
         next(ex)
     }
 }
+exports.returnService=async(req,res,next)=>{
+  try{
+    let service=await Service.findByIdAndUpdate(req.params.id,{isAvaible:true})
+    if(service) return res.status(200).send({message:"service is returned"})
+    return res.status(404).send({error:"service not found"})
+  }
+  catch(ex)
+  {
+      next(ex)
+  }
+}
 
 exports.newComment=async(req,res,next)=>{
    try{
@@ -67,14 +79,20 @@ exports.newComment=async(req,res,next)=>{
         comment:req.body.comment,
         mark:req.body.mark
       }
-      var service=await Service.findByIdAndUpdate(req.params.id,{$push: {comment:newComment }},{new:true})
+      var service=await Service.findByIdAndUpdate(req.params.id,{$push: {comments: newComment }},{new:true})
+      
       var somme=0;
       for(let i=0;i<service.comments.length;i++)
       {
-        somme=+service.comments[i].mark
+        
+        somme = somme + service.comments[i].mark
       }
-      service.rating=somme/service.comments.length;
-      await service.save()
+      
+      const averge= service.comments.length!==0 ? somme/service.comments.length : req.body.mark
+
+      await Service.findByIdAndUpdate(req.params.id,{rating: averge})
+      
+      
       if(service) return res.status(200).send({message:"success add new comment"})
       return res.status(400).send({error:"failed to add new comment"})
    }

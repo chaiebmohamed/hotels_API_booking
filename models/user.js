@@ -3,14 +3,13 @@ const jwt=require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
 
-    matricule: {type: String,required: true,min: 8},
+    matricule: {type: String,required: false,min: 8},
     firstname: {type: String,required: true,min: 6,max: 25},
     lastname: {type: String,required: true,min: 6,max: 25},
     adress: {type: String,required: true},
     email: {type: String,required: true,max: 25,min: 8},
     password: {type: String,required: false,min:10},
     country : {type:String,required:true},
-    profession : {type:String,required:true,},
     date_birth: {type: Date,default: Date.now},
     place_birth: {type: String,required:true},
     avatar:{type:String,required:false},
@@ -32,7 +31,7 @@ UserSchema.methods.generateAuth = function () {
         busy: this.busy,
         isAdmin:this.isAdmin
       },
-      process.env.JWT,
+      process.env.JWT_PRIVATE,
       {
         expiresIn: '24h',
       }

@@ -84,7 +84,7 @@ exports.newCheckIn=async(req,res,next)=>{
            adress: req.body.adress,
            email: req.body.email,
            country:req.body.country,
-           profession:req.body.profession,
+           
            date_birth:req.body.date_birth,
            place_birth:req.body.place_birth,
            phone:req.body.phone,
