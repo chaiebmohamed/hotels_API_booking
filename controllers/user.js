@@ -19,14 +19,17 @@ exports.getUser = async (req, res,next) => {
 
 
 exports.getAlluser = async (req, res,next) => {
+  
     try 
     {
+      
         let users = await User.find({status:true}).select("-password");
         if(!users) return res.status(400).send({error:"users not found"})
         if(users.length==0) return res.status(200).send({message:"no user found"})
         return res.status(200).send(users);
     }
     catch (ex) {
+      console.log("zebiii");
         next(ex)
     }
 }

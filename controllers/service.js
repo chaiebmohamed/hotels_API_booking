@@ -4,8 +4,8 @@ const {uploadImage}=require("../helpers/manage-file")
 
 exports.getAll=async(req,res,next)=>{
     try{
-       let services=await Service.find({isAvaible:true})
-       if(services) return res.status(200).send({data:services})
+       let services=await Service.find()
+       if(services) return res.status(200).send(services)
        return res.status(404).send({message:"services not found"})
     }
     catch(ex)
@@ -36,6 +36,7 @@ exports.addService=async(req,res,next)=>{
         req.files.image.name=`image.${req.files.image.mimetype.split('/')[1]}`
         const new_image=await uploadImage(`public/services/${req.body.type}/${req.body.name}`,`${req.body.name}${req.body.type}`,req.files.image, "image")
         if(new_image!=="error") service.image = new_image 
+        console.log(new_image + "zebiii");
       }
 
       const savedService = await service.save();

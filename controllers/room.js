@@ -3,7 +3,7 @@ const {uploadImage}=require("../helpers/manage-file")
 exports.getAll=async(req,res,next)=>{
     try{
        let rooms=await Room.find()
-       if(rooms) return res.status(200).send({data:rooms})
+       if(rooms) return res.status(200).send(rooms)
     }
     catch(ex)
     {
@@ -15,7 +15,7 @@ exports.getEmpltyRooms=async(req,res,next)=>{
     try
     {
       let rooms=await Room.find({isAvailable:true});
-      if(rooms) return res.status(200).send({data:rooms})
+      if(rooms) return res.status(200).send(rooms)
       return res.status(400).send({error:"empty rooms not found"}) 
     }
     catch(ex)
@@ -59,7 +59,7 @@ exports.addRoom = async (req, res,next) => {
         }
         room.images=images;
         const savedRoom = await room.save();
-        return res.status(201).send({data:savedRoom});
+        return res.status(201).send(savedRoom);
     }
     catch (ex) {
         next(ex)

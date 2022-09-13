@@ -84,7 +84,6 @@ exports.newCheckIn=async(req,res,next)=>{
            adress: req.body.adress,
            email: req.body.email,
            country:req.body.country,
-           
            date_birth:req.body.date_birth,
            place_birth:req.body.place_birth,
            phone:req.body.phone,
@@ -114,7 +113,8 @@ exports.newCheckIn=async(req,res,next)=>{
            room:req.body.room
        })
        var room=await Room.findById(req.body.room)
-       if(room) return res.status(404).send({error:"room not found"})
+       //!
+       if(!room) return res.status(404).send({error:"room not found"})
 
        var Period_days = date_end.getTime() - date_begin.getTime() / (1000 * 3600 * 24); 
        var Price_room_days=Period_days*room.price
@@ -136,14 +136,38 @@ exports.newCheckIn=async(req,res,next)=>{
        }
 
        newBooking.total_price=totalPrice
-       newBooking.code=generateCode(6)
+       const randomCode =generateCode(8) 
+       newBooking.code=randomCode;
+
+
 
        const savedBooking=await newBooking.save()
-       if(savedBooking) return res.status(201).send({message:"booking success",data:savedBooking})
+       if(!savedBooking) return res.status(400).send({error:"failed booking"})
 
-       return res.status(400).send({error:"failed booking"})
+       
+       const subject = "checking code";
+       var mail = {
+        from: "mouradi@gmail.com",
+        to: user.email,
+        subject: subject,
+        html: `<h1>subject :${subject}</h1><p>Your code is : ${randomCode}</p>`,
+                  };
 
+       
+     transporter.sendMail(mail, (err, data) => {
+     if (err) {
+         return res.status(500).json({ status: "fail sent" });
+              } 
+        else 
+        {
+        return res.status(200).json({ status: "success sent" });
+        }
+    });
+    
+    return res.status(201).send({message:"booking success",data:savedBooking})
+    
     }
+    
     catch(ex)
     {
         next(ex)

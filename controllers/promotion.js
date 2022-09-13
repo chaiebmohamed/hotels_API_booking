@@ -1,10 +1,10 @@
 const Promotion=require("../models/promotion")
-
+const {uploadImage}=require("../helpers/manage-file")
 
 exports.getAll=async(req,res,next)=>{
     try{
-      let promotions=await Promotion.find({isAvaible:true})
-      if(promotions) return res.status(200).send({data:promotions})
+      let promotions=await Promotion.find()
+      if(promotions) return res.status(200).send(promotions)
       return res.status(404).send({error:"promotions not found"})
     }
     catch(ex)
@@ -28,6 +28,7 @@ exports.newPromotion=async(req,res,next)=>{
         services:req.body.services
       })
       
+      console.log(req.body.services);
       if (req.files && req.files.image) {
         req.files.image.name=`image.${req.files.image.mimetype.split('/')[1]}`
         const new_image=await uploadImage(`public/images/promotion`,`${req.body.name}`,req.files.image, "image")
