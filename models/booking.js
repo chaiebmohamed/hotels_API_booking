@@ -5,7 +5,7 @@ const BookingSchema = new mongoose.Schema({
     date_begin:{type:Date,required:true},
     date_end:{type:Date,required:true},
     total_price:{type:Number,required:true},
-    code:{type:Number,required:true,default:""},
+    code:{type:String,required:true,default:""},
     valid:{type: Boolean,required:true,default:false},
     services :[{type:mongoose.Types.ObjectId,ref:"service"}],
     promotion:[{type:mongoose.Types.ObjectId,ref:"promotion"}],
