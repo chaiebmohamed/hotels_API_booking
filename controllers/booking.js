@@ -10,7 +10,8 @@ const mongoose = require("mongoose")
 const { ObjectId } = require('mongodb');
 const number = require("@hapi/joi/lib/types/number")
 var nodemailer = require('nodemailer');
- const hbs = require('nodemailer-express-handlebars')
+const hbs = require('nodemailer-express-handlebars')
+const sendemail = require("../helpers/send-mail")
 
 
 
@@ -164,31 +165,33 @@ exports.newCheckIn=async(req,res,next)=>{
        const savedBooking=await newBooking.save()
        if(!savedBooking) return res.status(400).send({error:"failed booking"})
 
-       var transporter = nodemailer.createTransport(
-        {
-            service: 'gmail',
-            auth:{
-                user: process.env.EMAIL,
-                pass: process.env.PASSWORD
-            }
-        }
-    );
+    sendemail(user.email,'ahla bik ya mama','ya welcome ya welcome')
 
-    let mailOptions = {
-        from : process.env.EMAIL,
-        to : user.email,
-        subject  : 'ahla bik ya mama',
-        text : 'ya welcome ya welcome'
-    }
+    //    var transporter = nodemailer.createTransport(
+    //     {
+    //         service: 'gmail',
+    //         auth:{
+    //             user: process.env.EMAIL,
+    //             pass: process.env.PASSWORD
+    //         }
+    //     }
+    // );
 
-    transporter.sendMail(mailOptions , function(err , data){
-        if (err){
-            console.log('Error Occurs' ,err)
-        }
-        else {
-            console.log('Email sent !S')
-        }
-    });
+    // let mailOptions = {
+    //     from : process.env.EMAIL,
+    //     to : user.email,
+    //     subject  : 'ahla bik ya mama',
+    //     text : 'ya welcome ya welcome'
+    // }
+
+    // transporter.sendMail(mailOptions , function(err , data){
+    //     if (err){
+    //         console.log('Error Occurs' ,err)
+    //     }
+    //     else {
+    //         console.log('Email sent !')
+    //     }
+    // });
 
     
 
