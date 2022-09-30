@@ -12,6 +12,8 @@ const number = require("@hapi/joi/lib/types/number")
 var nodemailer = require('nodemailer');
 const hbs = require('nodemailer-express-handlebars')
 const sendemail = require("../helpers/send-mail")
+var bcrypt = require('bcryptjs');
+
 
 
 
@@ -48,24 +50,14 @@ exports.validateCheckIn=async(req,res,next)=>{
      let generated_password=generateCode(12)
      const salt = await bcrypt.genSalt(10);
      let crypted_password = await bcrypt.hash(generated_password, salt);
-     var client=await User.findByIdAndUpdate(booking.client._id,{password:crypted_password})
-
+     console.log(generated_password);
+     
+     var client=await User.findByIdAndUpdate(booking.client._id,{password:generated_password})
+   
      
      // send mail to client
-     const subject = "Activate Account";
-     var mail = {
-        from: "@adresse-sender",
-        to: client.email,
-        subject: subject,
-        html: `<h1>subject :${subject}</h1><p>Your password: ${generated_password}</p>`,
-     };
-    transporter.sendMail(mail, (err, data) => {
-     if (err) {
-         return res.status(500).json({ status: "fail sent" });
-        } else {
-        return res.status(200).json({ status: "success sent" });
-      }
-    });
+     
+     sendemail(client.email,"Account activation", `this is your password ${generated_password}`);
        return res.status(200).send({message:"success activate account client"})
     }
     catch(ex)
@@ -165,7 +157,7 @@ exports.newCheckIn=async(req,res,next)=>{
        const savedBooking=await newBooking.save()
        if(!savedBooking) return res.status(400).send({error:"failed booking"})
 
-    sendemail(user.email,'ahla bik ya mama','ya welcome ya welcome')
+    sendemail(user.email,'ahla bik ya mama',`ya welcome ya welcome w haw el code mte3ek ${randomCode}`)
 
     //    var transporter = nodemailer.createTransport(
     //     {

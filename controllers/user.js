@@ -162,6 +162,23 @@ exports.addAdmin = async (req, res, next) => {
 
 }
 
+exports.singInClient = async (req, res, next) => {
+  try {
+
+    var user = await User.findOne({ email: req.body.email, status: true });
+    if (!user) return res.status(404).send({ error: 'invalid email' });
+
+    const validpassword = req.body.password == user.password
+    if (!validpassword) return res.status(401).send({ error: 'Invalid Password' })
+
+    const token = user.generateAuth();
+    return res.header("auth-token", token).status(200).send({ message: "login successful", data: user })
+  }
+  catch (ex) {
+    next(ex)
+  }
+}
+
 exports.singIn = async (req, res, next) => {
   try {
 

@@ -8,7 +8,7 @@ const validateObjetId=require("../middlewares/validateObjectId")
 
 router.get('/all',auth,admin,userController.getAlluser,error);
 router.get('/:id',auth,admin,userController.getUser,error);
-
+router.post("/signInClient",userController.singInClient,error);
 
 router.post("/registerAdmin",userController.addAdmin,error);
 router.post('/registerUser',auth,admin,userController.addUser,error);

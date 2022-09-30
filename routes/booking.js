@@ -10,7 +10,7 @@ const validateObjectId = require('../middlewares/validateObjectId');
 
 router.get("/getAll",auth,receptioniste,bookingController.getAll,error);
 router.post("/newCheckIng",bookingController.newCheckIn,error);
-router.path("/validateCheckIn/:id",validateObjectId,auth,receptioniste,bookingController.validateCheckIn,error);
+router.patch("/validateCheckIn/:id",validateObjectId,auth,receptioniste,bookingController.validateCheckIn,error);
 
 
 module.exports = router;
