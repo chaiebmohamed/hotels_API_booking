@@ -1,6 +1,8 @@
 const Promotion=require("../models/promotion")
 const {uploadImage}=require("../helpers/manage-file")
 
+
+
 exports.getAll=async(req,res,next)=>{
     try{
       let promotions=await Promotion.find()

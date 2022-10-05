@@ -7,6 +7,7 @@ const error=require("../middlewares/error")
 const validateObjetId=require("../middlewares/validateObjectId")
 
 router.get('/all',promotionController.getAll,error)
+
 router.post("/newPromotion",auth,admin,promotionController.newPromotion,error)
 router.delete("/removePromotion/:id",validateObjetId,auth,admin,promotionController.removePormotion,error)
 
