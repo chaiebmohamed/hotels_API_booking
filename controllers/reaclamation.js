@@ -1,16 +1,15 @@
 const reclamation = require("../models/reclamation")
 const { find } = require("../models/reclamation")
-const Reclamation = require("../models/reclamation")
 
 
 exports.newReclamation = async (req, res, next) => {
     try {
-        var reaclamation = new Reclamation({
+        var reaclamations = new reclamation({
             description: req.body.description,
             client: req.user._id
         })
-        const savedReclamation = await reaclamation.save()
-        if (savedReclamation) return res.status(201).send({ data: reaclamation, message: "success create" })
+        const savedReclamation = await reaclamations.save()
+        if (savedReclamation) return res.status(201).send({ data: reaclamations, message: "success create" })
         return res.status(400).send({ error: "failed create reaclamation" })
     }
     catch (ex) {
@@ -30,11 +29,13 @@ exports.getAllReclamation = async (req, res, next) => {
     }
 }
 
-// exports.fixReclamation = async (req, res, next) => {
-//     try {
+exports.fixReclamation = async (req, res, next) => {
+    try {
+        let reclamations = await reclamation.findOneAndUpdate({ _id: req.params.id, status: "notfixed" }, { status: "fixed"})
+        if (reclamations) return res.status(200).send({message: "fixed" });
 
-//     }
-//     catch (ex) {
-//         next(ex)
-//     }
-// }
+    }
+    catch (ex) {
+        next(ex)
+    }
+}

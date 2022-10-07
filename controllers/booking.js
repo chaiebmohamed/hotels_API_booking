@@ -50,7 +50,7 @@ exports.validateCheckIn=async(req,res,next)=>{
      let generated_password=generateCode(12)
      const salt = await bcrypt.genSalt(10);
      let crypted_password = await bcrypt.hash(generated_password, salt);
-     console.log(generated_password);
+     console.log(generated_password );
      
      var client=await User.findByIdAndUpdate(booking.client._id,{password:generated_password})
    

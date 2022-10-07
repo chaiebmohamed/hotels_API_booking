@@ -8,6 +8,7 @@ const travailleur = require('../middlewares/travailleur')
 
 
 router.post("/newReclamation",auth,client,reclamationController.newReclamation,error)
-router.get("Reclamations",auth,travailleur,reclamationController.getAllReclamation,error)
+router.get("/Reclamations",reclamationController.getAllReclamation,error)
+router.patch("/fixReclamation/:id",reclamationController.fixReclamation,error)
 
 module.exports=router;

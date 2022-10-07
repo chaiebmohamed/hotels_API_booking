@@ -167,6 +167,8 @@ exports.singInClient = async (req, res, next) => {
 
     var user = await User.findOne({ email: req.body.email, status: true });
     if (!user) return res.status(404).send({ error: 'invalid email' });
+    
+    console.log("3assba");
 
     const validpassword = req.body.password == user.password
     if (!validpassword) return res.status(401).send({ error: 'Invalid Password' })
